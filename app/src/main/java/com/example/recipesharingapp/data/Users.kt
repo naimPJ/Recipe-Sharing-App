@@ -1,4 +1,4 @@
-package com.example.recipesharingapp.data.models
+package com.example.recipesharingapp.data
 
 import androidx.room.Entity
 import androidx.room.ForeignKey

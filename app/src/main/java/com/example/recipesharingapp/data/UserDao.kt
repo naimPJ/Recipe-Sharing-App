@@ -1,8 +1,8 @@
-package com.example.recipesharingapp.data.daos
+package com.example.recipesharingapp.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.recipesharingapp.data.models.Users
+import com.example.recipesharingapp.data.Users
 
 @Dao
 interface UserDao{

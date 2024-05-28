@@ -2,7 +2,6 @@ package com.example.recipesharingapp.ui.theme.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -14,15 +13,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.recipesharingapp.data.RecipeDao
+import com.example.recipesharingapp.data.Recipes
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
 
 @Composable
-fun CreateRecipeScreen() {
+fun CreateRecipeScreen(
+    modifier: Modifier = Modifier,
+    recipeDao: RecipeDao,
+    scope: CoroutineScope
+) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var ingredients by remember { mutableStateOf("") }
     var steps by remember { mutableStateOf("") }
     var cookingTime by remember { mutableStateOf("") }
     var calories by remember { mutableStateOf("") }
+    var imageUrl by remember { mutableStateOf("") }
 
     LazyColumn(
         modifier = Modifier
@@ -117,11 +126,36 @@ fun CreateRecipeScreen() {
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
+        item {
+            TextField(
+                value = imageUrl,
+                onValueChange = { imageUrl = it },
+                label = { Text("URL") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                singleLine = true,
+                textStyle = TextStyle(fontSize = 18.sp),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+        }
 
         item {
             Button(
                 onClick = {
-                    // Handle the click event, e.g., save the new recipe
+                    scope.launch {
+                        var newRecipe: Recipes = Recipes(
+                            userID = 1,
+                            title = title,
+                            desc = description,
+                            ingredients = ingredients,
+                            instructions = steps,
+                            cookingTime = cookingTime.toInt(),
+                            calories = calories.toInt(),
+                            imageUrl = imageUrl
+                        )
+                        recipeDao.insert(newRecipe)
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()

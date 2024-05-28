@@ -1,20 +1,11 @@
-package com.example.recipesharingapp.data.models
+package com.example.recipesharingapp.data
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 
-@Entity(
-    tableName = "recipes",
-    foreignKeys = [
-        ForeignKey(
-            entity = Users::class,
-            parentColumns = ["ID"],
-            childColumns = ["userID"],
-            onDelete = ForeignKey.CASCADE
-        )])
-
+@Entity(tableName = "recipes")
 data class Recipes(
     @PrimaryKey(autoGenerate = true) val recipeID: Int = 0,
     val userID: Int,
@@ -22,7 +13,7 @@ data class Recipes(
     var desc: String,
     var instructions: String,
     var ingredients: String,
-    var cookingTime: String,
+    var cookingTime: Int,
     var calories: Int,
     var imageUrl: String
 

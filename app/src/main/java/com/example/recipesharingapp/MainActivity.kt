@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModelStore
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +17,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.recipesharingapp.ui.theme.screen.CreateRecipeScreen
 import com.example.recipesharingapp.ui.theme.screen.RecipeDetailsScreen
 import com.example.recipesharingapp.ui.theme.screen.Feed
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import com.example.recipesharingapp.data.MyDatabase
 
 
 
@@ -23,18 +27,27 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreen()
+            val db = MyDatabase.getInstance(this)
+            MainScreen(db = db)
         }
     }
 }
 @Composable
-fun MainScreen() {
+fun MainScreen(modifier: Modifier = Modifier, db: MyDatabase) {
+    val viewModelStore = ViewModelStore()
+
+    fun getViewModelStore(): ViewModelStore{
+        return viewModelStore
+    }
+
     val navController = rememberNavController()
+    val myScope = CoroutineScope(Dispatchers.Default)
+    val recipeDao = db.recipeDao()
     NavHost(navController = navController, startDestination = "home") {
         composable("home") { HomeScreen(navController) }
         composable("recipeDetails") { RecipeDetailsScreen() }
         composable("feed") { Feed() }
-        composable("createRecipe") { CreateRecipeScreen() }
+        composable("createRecipe") { CreateRecipeScreen(recipeDao = recipeDao, scope = myScope) }
     }
 }
 
