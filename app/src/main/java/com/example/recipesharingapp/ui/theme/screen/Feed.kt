@@ -47,7 +47,7 @@ fun Feed() {
             title = "Classic French Toast\nWith Maple Syrup"
         ),
         Recipe(
-                painter = painterResource(id = R.drawable.pancakes),
+            painter = painterResource(id = R.drawable.pancakes),
             description = "Golden French toast",
             title = "Classic French Toast\nWith Maple Syrup"
         ),

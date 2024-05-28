@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.recipesharingapp.ui.theme.screen.CreateRecipeScreen
 import com.example.recipesharingapp.ui.theme.screen.RecipeDetailsScreen
 import com.example.recipesharingapp.ui.theme.screen.Feed
 
@@ -33,7 +34,7 @@ fun MainScreen() {
         composable("home") { HomeScreen(navController) }
         composable("recipeDetails") { RecipeDetailsScreen() }
         composable("feed") { Feed() }
-
+        composable("createRecipe") { CreateRecipeScreen() }
     }
 }
 
@@ -49,6 +50,9 @@ fun HomeScreen(navController: NavHostController) {
         }
         Button(onClick = { navController.navigate("feed") }) {
             Text(text = "Go to Feed")
+        }
+        Button(onClick = { navController.navigate("createRecipe") }) {
+            Text(text = "Go to Create Recipe")
         }
     }
 }
