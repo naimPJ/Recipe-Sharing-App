@@ -14,6 +14,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.recipesharingapp.ui.theme.screen.RecipeDetailsScreen
+import com.example.recipesharingapp.ui.theme.screen.Feed
+
 
 
 class MainActivity : ComponentActivity() {
@@ -24,13 +26,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
         composable("home") { HomeScreen(navController) }
         composable("recipeDetails") { RecipeDetailsScreen() }
+        composable("feed") { Feed() }
+
     }
 }
 
@@ -43,6 +46,9 @@ fun HomeScreen(navController: NavHostController) {
     ) {
         Button(onClick = { navController.navigate("recipeDetails") }) {
             Text(text = "Go to Recipe Details")
+        }
+        Button(onClick = { navController.navigate("feed") }) {
+            Text(text = "Go to Feed")
         }
     }
 }
