@@ -14,6 +14,11 @@ object AppViewModelProvider {
                 recipeApplication().container.recipeRepository
             )
         }
+        initializer {
+            FeedViewModel(
+                recipeApplication().container.recipeRepository
+            )
+        }
     }
 }
 

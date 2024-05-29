@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -19,44 +21,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.recipesharingapp.R
-
-
-data class Recipe(
-    val painter: Painter,
-    val description: String,
-    val title: String
-)
+import com.example.recipesharingapp.viewModel.AppViewModelProvider
+import com.example.recipesharingapp.viewModel.FeedViewModel
 
 @Composable
-fun Feed() {
-    val recipes = listOf(
-        Recipe(
-            painter = painterResource(id = R.drawable.pancakes),
-            description = "Creamy pancakes",
-            title = "Almond & Orange Blossom\nFrench Crepes"
-        ),
-        Recipe(
-            painter = painterResource(id = R.drawable.pancakes),
-            description = "Delicious waffles",
-            title = "Belgian Waffles\nWith Fresh Berries"
-        ),
-        Recipe(
-            painter = painterResource(id = R.drawable.pancakes),
-            description = "Golden French toast",
-            title = "Classic French Toast\nWith Maple Syrup"
-        ),
-        Recipe(
-            painter = painterResource(id = R.drawable.pancakes),
-            description = "Golden French toast",
-            title = "Classic French Toast\nWith Maple Syrup"
-        ),
-        Recipe(
-            painter = painterResource(id = R.drawable.pancakes),
-            description = "Golden French toast",
-            title = "Classic French Toast\nWith Maple Syrup"
-        )
-    )
+fun Feed(feedViewModel: FeedViewModel = viewModel(factory = AppViewModelProvider.Factory)) {
+    val recipes by feedViewModel.recipes.collectAsState()
 
     LazyColumn(
         modifier = Modifier
@@ -71,7 +43,7 @@ fun Feed() {
                 contentAlignment = Alignment.Center
             ) {
                 ImageCard(
-                    painter = recipe.painter,
+                    imageUrl = recipe.imageUrl,
                     contentDescripton = recipe.description,
                     title = recipe.title
                 )
@@ -82,7 +54,7 @@ fun Feed() {
 
 @Composable
 fun ImageCard(
-    painter: Painter,
+    imageUrl: String,
     contentDescripton: String,
     title: String,
     modifier: Modifier = Modifier
@@ -95,7 +67,7 @@ fun ImageCard(
     ){
         Box (modifier = Modifier.height(240.dp)){
             Image(
-                painter = painter,
+                painter = painterResource(id = R.drawable.pancakes,),
                 contentDescription = contentDescripton,
                 contentScale = ContentScale.Crop
             )
