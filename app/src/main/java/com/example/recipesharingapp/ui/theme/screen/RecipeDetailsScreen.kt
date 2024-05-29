@@ -32,7 +32,7 @@ fun RecipeDetailsScreen(
     recipeId: Int,
     recipeDetailViewModel: RecipeDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val recipe by  recipeDetailViewModel.recipe.collectAsState()
+    val recipe by recipeDetailViewModel.recipe.collectAsState()
     var showIngredients by remember { mutableStateOf(false) }
     var showSteps by remember { mutableStateOf(false) }
 
@@ -79,54 +79,52 @@ fun RecipeDetailsScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                 InfoChip(text = "${recipeDetails.cookingTime} min")
-
                 InfoChip(text = "${recipeDetails.calories} Cal")
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (showSteps) {
-                Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-                    // Add logic to display steps here
-                    Text("Steps:", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    // Render your steps here based on the recipeDetails object
-                    // Example: recipeDetails.steps.split(",").forEachIndexed { index, step ->
-                    //     Text("${index + 1}. $step")
-                    // }
+            // Toggle Ingredients Button and Content
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = { showIngredients = !showIngredients },
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(Color.Gray)
+                ) {
+                    Text(text = if (showIngredients) "Hide Ingredients" else "Show Ingredients")
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+                if (showIngredients) {
+                    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+                        Text("Ingredients:", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                        recipeDetails.ingredients.split(",").forEach { ingredient ->
+                            Text(ingredient)
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
             }
 
-            // Ingredients Section
-            if (showIngredients) {
-                Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-                    // Add logic to display ingredients here
-                    Text("Ingredients:", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    // Render your ingredients here based on the recipeDetails object
-                    // Example: recipeDetails.ingredients.split(",").forEach { ingredient ->
-                    //     Text(ingredient)
-                    // }
+            // Toggle Steps Button and Content
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = { showSteps = !showSteps },
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(Color.Gray)
+                ) {
+                    Text(text = if (showSteps) "Hide Steps" else "Show Steps")
                 }
-                Spacer(modifier = Modifier.height(12.dp))
-            }
-
-            // Toggle Ingredients Button
-            Button(
-                onClick = { showIngredients = !showIngredients },
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(Color.Gray)
-            ) {
-                Text(text = if (showIngredients) "Hide Ingredients" else "Show Ingredients")
-            }
-            Button(
-                onClick = { showSteps = !showSteps },
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(Color.Gray)
-            ) {
-                Text(text = if (showSteps) "Hide Steps" else "Show Steps")
+                if (showSteps) {
+                    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+                        Text("Steps:", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                        recipeDetails.instructions.split(",").forEachIndexed { index, step ->
+                            Text("${index + 1}. $step")
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
             }
         }
     } ?: run {
@@ -136,6 +134,7 @@ fun RecipeDetailsScreen(
         }
     }
 }
+
 @Composable
 fun InfoChip(text: String) {
     Box(
