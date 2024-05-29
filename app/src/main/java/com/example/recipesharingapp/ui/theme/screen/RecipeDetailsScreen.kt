@@ -4,7 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,7 +56,7 @@ fun RecipeDetailsScreen() {
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = "Carol Gilliam")
             Spacer(modifier = Modifier.width(8.dp))
-            Button(onClick = {}, colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)) {
+            Button(onClick = {}, colors = ButtonDefaults.buttonColors(Color.Green)) {
                 Text(text = "Follow", color = Color.White)
             }
         }
@@ -78,7 +78,7 @@ fun RecipeDetailsScreen() {
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
+            colors = ButtonDefaults.buttonColors(Color.Green)
         ) {
             Text(text = "Let's cook", color = Color.White)
         }

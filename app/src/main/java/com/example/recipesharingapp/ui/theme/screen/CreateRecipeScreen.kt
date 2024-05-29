@@ -3,7 +3,7 @@ package com.example.recipesharingapp.ui.theme.screen
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,25 +13,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.recipesharingapp.data.RecipeDao
-import com.example.recipesharingapp.data.Recipes
-import kotlinx.coroutines.CoroutineScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.recipesharingapp.viewModel.CreateRecipeViewModel
+import com.example.recipesharingapp.viewModel.AppViewModelProvider
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun CreateRecipeScreen(
-    modifier: Modifier = Modifier,
-    recipeDao: RecipeDao,
-    scope: CoroutineScope
+    viewModel: CreateRecipeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    var title by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var ingredients by remember { mutableStateOf("") }
-    var steps by remember { mutableStateOf("") }
-    var cookingTime by remember { mutableStateOf("") }
-    var calories by remember { mutableStateOf("") }
-    var imageUrl by remember { mutableStateOf("") }
+    val title by viewModel.title.collectAsState()
+    val description by viewModel.description.collectAsState()
+    val ingredients by viewModel.ingredients.collectAsState()
+    val steps by viewModel.steps.collectAsState()
+    val cookingTime by viewModel.cookingTime.collectAsState()
+    val calories by viewModel.calories.collectAsState()
+    val imageUrl by viewModel.imageUrl.collectAsState()
+
+    val coroutineScope = rememberCoroutineScope()
 
     LazyColumn(
         modifier = Modifier
@@ -50,7 +49,7 @@ fun CreateRecipeScreen(
         item {
             TextField(
                 value = title,
-                onValueChange = { title = it },
+                onValueChange = viewModel::onTitleChange,
                 label = { Text("Recipe Title") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -63,7 +62,7 @@ fun CreateRecipeScreen(
         item {
             TextField(
                 value = description,
-                onValueChange = { description = it },
+                onValueChange = viewModel::onDescriptionChange,
                 label = { Text("Description") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -76,7 +75,7 @@ fun CreateRecipeScreen(
         item {
             TextField(
                 value = ingredients,
-                onValueChange = { ingredients = it },
+                onValueChange = viewModel::onIngredientsChange,
                 label = { Text("Ingredients") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -89,7 +88,7 @@ fun CreateRecipeScreen(
         item {
             TextField(
                 value = steps,
-                onValueChange = { steps = it },
+                onValueChange = viewModel::onStepsChange,
                 label = { Text("Steps") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -102,7 +101,7 @@ fun CreateRecipeScreen(
         item {
             TextField(
                 value = cookingTime,
-                onValueChange = { cookingTime = it },
+                onValueChange = viewModel::onCookingTimeChange,
                 label = { Text("Cooking Time") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -116,7 +115,7 @@ fun CreateRecipeScreen(
         item {
             TextField(
                 value = calories,
-                onValueChange = { calories = it },
+                onValueChange = viewModel::onCaloriesChange,
                 label = { Text("Calories") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -126,10 +125,11 @@ fun CreateRecipeScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
+
         item {
             TextField(
                 value = imageUrl,
-                onValueChange = { imageUrl = it },
+                onValueChange = viewModel::onImageUrlChange,
                 label = { Text("URL") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -143,24 +143,14 @@ fun CreateRecipeScreen(
         item {
             Button(
                 onClick = {
-                    scope.launch {
-                        var newRecipe: Recipes = Recipes(
-                            userID = 1,
-                            title = title,
-                            desc = description,
-                            ingredients = ingredients,
-                            instructions = steps,
-                            cookingTime = cookingTime.toInt(),
-                            calories = calories.toInt(),
-                            imageUrl = imageUrl
-                        )
-                        recipeDao.insert(newRecipe)
+                    coroutineScope.launch {
+                        viewModel.saveRecipe()
                     }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)
+                colors = ButtonDefaults.buttonColors(Color.Green)
             ) {
                 Text(text = "Save Recipe", color = Color.White)
             }
