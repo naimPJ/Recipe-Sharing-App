@@ -32,7 +32,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
     NavHost(navController = navController, startDestination = "home") {
         composable("home") { HomeScreen(navController) }
-        composable("recipeDetails") { RecipeDetailsScreen() }
+        composable("recipeDetails") { RecipeDetailsScreen(1) }
         composable("feed") { Feed() }
         composable("createRecipe") { CreateRecipeScreen() }
     }

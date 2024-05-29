@@ -19,6 +19,11 @@ object AppViewModelProvider {
                 recipeApplication().container.recipeRepository
             )
         }
+        initializer {
+            RecipeDetailsViewModel(
+                recipeApplication().container.recipeRepository
+            )
+        }
     }
 }
 

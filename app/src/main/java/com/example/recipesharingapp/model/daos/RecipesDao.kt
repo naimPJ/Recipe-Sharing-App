@@ -21,7 +21,7 @@ interface RecipesDao {
     suspend fun delete(recipes: Recipes)
 
     @Query("SELECT * FROM Recipes WHERE id = :id")
-    fun getRecipes(id: Int): Flow<Recipes>
+    fun getRecipe(id: Int): Flow<Recipes>
 
     @Query("SELECT * FROM Recipes")
     fun getRecipes(): Flow<List<Recipes>>

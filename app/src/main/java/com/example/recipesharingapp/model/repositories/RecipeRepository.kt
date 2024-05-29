@@ -11,7 +11,7 @@ class RecipeRepository(private val recipesDao: RecipesDao): BaseRepository<Recip
 
     override suspend fun delete(t: Recipes) = recipesDao.delete(t)
 
-    override fun getOneStream(id: Int): Flow<Recipes?> = recipesDao.getRecipes(id)
+    override fun getOneStream(id: Int): Flow<Recipes?> = recipesDao.getRecipe(id)
 
     fun getRecipes(): Flow<List<Recipes>> = recipesDao.getRecipes()
 
