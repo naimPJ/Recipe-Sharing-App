@@ -10,9 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.recipesharingapp.ui.theme.screen.CreateRecipeScreen
 import com.example.recipesharingapp.ui.theme.screen.RecipeDetailsScreen
 import com.example.recipesharingapp.ui.theme.screen.Feed
@@ -29,12 +31,20 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-
-    NavHost(navController = navController, startDestination = "home") {
-        composable("home") { HomeScreen(navController) }
-        composable("recipeDetails") { RecipeDetailsScreen(1) }
-        composable("feed") { Feed() }
-        composable("createRecipe") { CreateRecipeScreen() }
+    NavHost(navController, startDestination = "createRecipe") {
+        composable("feed") {
+            Feed(navController = navController)
+        }
+        composable("createRecipe") {
+            CreateRecipeScreen(navController = navController)
+        }
+        composable(
+            "recipeDetails/{recipeId}",
+            arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
+            RecipeDetailsScreen(recipeId = recipeId)
+        }
     }
 }
 

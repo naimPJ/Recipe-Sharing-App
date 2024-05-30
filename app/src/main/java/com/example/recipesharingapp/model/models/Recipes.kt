@@ -1,11 +1,17 @@
 package com.example.recipesharingapp.model.models
 
+import android.net.Uri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import org.jetbrains.annotations.NotNull
+import com.example.recipesharingapp.viewModel.Recipe
+import com.example.recipesharingapp.viewModel.UriTypeConverter
+
 
 @Entity(tableName = "Recipes")
+@TypeConverters(UriTypeConverter::class)
 data class Recipes(
     @PrimaryKey(autoGenerate = true)
     @NotNull
@@ -30,7 +36,7 @@ data class Recipes(
     @ColumnInfo(name = "calories")
     val calories: Int,
 
-    @ColumnInfo(name = "imageUrl")
-    val imageUrl: String
+    @ColumnInfo(name = "imageUri")
+    val imageUri: Uri?
 )
 

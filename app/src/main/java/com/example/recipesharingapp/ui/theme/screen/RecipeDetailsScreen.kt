@@ -1,5 +1,6 @@
 package com.example.recipesharingapp.ui.theme.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,9 +23,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
 import com.example.recipesharingapp.R
 import com.example.recipesharingapp.viewModel.AppViewModelProvider
-import com.example.recipesharingapp.viewModel.FeedViewModel
 import com.example.recipesharingapp.viewModel.RecipeDetailsViewModel
 
 @Composable
@@ -32,6 +33,8 @@ fun RecipeDetailsScreen(
     recipeId: Int,
     recipeDetailViewModel: RecipeDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    Log.d("RecipeApp", "Displaying details for recipe ID: $recipeId")
+
     val recipe by recipeDetailViewModel.recipe.collectAsState()
     var showIngredients by remember { mutableStateOf(false) }
     var showSteps by remember { mutableStateOf(false) }
@@ -42,14 +45,26 @@ fun RecipeDetailsScreen(
 
     recipe?.let { recipeDetails ->
         Column(modifier = Modifier.fillMaxSize()) {
-            Image(
-                painter = painterResource(id = R.drawable.pancakes), // Replace with recipeDetails.imageUrl if available
-                contentDescription = recipeDetails.title,
-                modifier = Modifier
-                    .height(300.dp)
-                    .fillMaxWidth(),
-                contentScale = ContentScale.Crop
-            )
+            if (recipeDetails.imageUri != null) {
+                Image(
+                    painter = rememberAsyncImagePainter(recipeDetails.imageUri),
+                    contentDescription = recipeDetails.description,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .height(300.dp)
+                        .fillMaxWidth(),
+                    )
+            } else {
+                // Display placeholder if no image URI provided
+                Image(
+                    painter = painterResource(R.drawable.pancakes),
+                    contentDescription = recipeDetails.description,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .height(300.dp)
+                        .fillMaxWidth(),
+                )
+            }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = recipeDetails.title,
@@ -143,13 +158,5 @@ fun InfoChip(text: String) {
             .padding(8.dp)
     ) {
         Text(text = text)
-    }
-}
-
-@Composable
-fun NutrientInfo(value: String, nutrient: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = value, fontWeight = FontWeight.Bold)
-        Text(text = nutrient)
     }
 }

@@ -1,8 +1,11 @@
 package com.example.recipesharingapp.ui.theme.screen
 
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,19 +18,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.example.recipesharingapp.R
 import com.example.recipesharingapp.viewModel.AppViewModelProvider
 import com.example.recipesharingapp.viewModel.FeedViewModel
 
 @Composable
-fun Feed(feedViewModel: FeedViewModel = viewModel(factory = AppViewModelProvider.Factory)) {
+fun Feed(navController: NavController, feedViewModel: FeedViewModel = viewModel(factory = AppViewModelProvider.Factory)) {
     val recipes by feedViewModel.recipes.collectAsState()
 
     LazyColumn(
@@ -39,13 +44,16 @@ fun Feed(feedViewModel: FeedViewModel = viewModel(factory = AppViewModelProvider
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.7f)
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .clickable {
+                        Log.d("RecipeApp", "Navigating to recipe with ID: ${recipe.id}")
+                        navController.navigate("recipeDetails/${recipe.id}") },
                 contentAlignment = Alignment.Center
             ) {
                 ImageCard(
-                    imageUrl = recipe.imageUrl,
                     contentDescripton = recipe.description,
-                    title = recipe.title
+                    title = recipe.title,
+                    imageUri = recipe.imageUri
                 )
             }
         }
@@ -54,9 +62,9 @@ fun Feed(feedViewModel: FeedViewModel = viewModel(factory = AppViewModelProvider
 
 @Composable
 fun ImageCard(
-    imageUrl: String,
     contentDescripton: String,
     title: String,
+    imageUri: Uri?,
     modifier: Modifier = Modifier
 ){
     Card (
@@ -66,11 +74,23 @@ fun ImageCard(
         shape = RoundedCornerShape(15.dp)
     ){
         Box (modifier = Modifier.height(240.dp)){
-            Image(
-                painter = painterResource(id = R.drawable.pancakes,),
-                contentDescription = contentDescripton,
-                contentScale = ContentScale.Crop
-            )
+            if (imageUri != null) {
+                // Try loading the image from the content URI
+                Image(
+                    painter = rememberAsyncImagePainter(imageUri),
+                    contentDescription = contentDescripton,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            } else {
+                // Display placeholder if no image URI provided
+                Image(
+                    painter = painterResource(R.drawable.pancakes), // Replace with your placeholder image resource
+                    contentDescription = contentDescripton,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
             Box(modifier = Modifier
                 .fillMaxSize()
                 .background(

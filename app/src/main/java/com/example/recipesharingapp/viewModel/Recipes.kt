@@ -1,5 +1,8 @@
 package com.example.recipesharingapp.viewModel
 
+import android.net.Uri
+import androidx.room.TypeConverter
+
 data class Recipe(
     val id: Int = 0,
     val title: String = "",
@@ -8,7 +11,7 @@ data class Recipe(
     val instructions: String = "",
     val cookingTime: Int = 0,
     val calories: Int = 0,
-    val imageUrl: String = ""
+    val imageUri: Uri? = null
 )
 
 data class RecipeUiState(
@@ -22,4 +25,17 @@ fun Recipe.toRecipeUiState(isEntryValid: Boolean = false): RecipeUiState = Recip
 )
 
 fun RecipeUiState.toRecipe(): Recipe = recipe.copy()
+
+class UriTypeConverter {
+
+    @TypeConverter
+    fun fromUri(uri: Uri?): String? {
+        return uri?.toString()
+    }
+
+    @TypeConverter
+    fun toUri(uriString: String?): Uri? {
+        return uriString?.let { Uri.parse(it) }
+    }
+}
 

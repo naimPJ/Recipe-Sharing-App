@@ -22,9 +22,10 @@ class FeedViewModel(private val recipeRepository: RecipeRepository) : ViewModel(
             recipeRepository.getRecipes().collect { recipesList ->
                 val mappedRecipes = recipesList.map { recipe ->
                     Recipe(
-                        imageUrl = "FADADADA",
+                        id = recipe.id,
                         description = recipe.description,
-                        title = recipe.title
+                        title = recipe.title,
+                        imageUri = recipe.imageUri
                     )
                 }
                 _recipes.value = mappedRecipes

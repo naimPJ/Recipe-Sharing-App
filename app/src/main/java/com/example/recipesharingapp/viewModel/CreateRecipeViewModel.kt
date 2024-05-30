@@ -1,5 +1,6 @@
 package com.example.recipesharingapp.viewModel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipesharingapp.model.models.Recipes
@@ -28,8 +29,8 @@ class CreateRecipeViewModel(private val recipeRepository: RecipeRepository) : Vi
     private val _calories = MutableStateFlow("")
     val calories: StateFlow<String> = _calories
 
-    private val _imageUrl = MutableStateFlow("")
-    val imageUrl: StateFlow<String> = _imageUrl
+    private val _imageUri = MutableStateFlow<Uri?>(null)
+    val imageUri: StateFlow<Uri?> = _imageUri
 
     fun onTitleChange(newTitle: String) {
         _title.value = newTitle
@@ -55,8 +56,8 @@ class CreateRecipeViewModel(private val recipeRepository: RecipeRepository) : Vi
         _calories.value = newCalories
     }
 
-    fun onImageUrlChange(newImageUrl: String) {
-        _imageUrl.value = newImageUrl
+    fun onImageUriChange(newImageUri: Uri?) {
+        _imageUri.value = newImageUri
     }
 
     fun saveRecipe() {
@@ -67,12 +68,10 @@ class CreateRecipeViewModel(private val recipeRepository: RecipeRepository) : Vi
             instructions = _steps.value,
             cookingTime = _cookingTime.value.toIntOrNull() ?: 0,
             calories = _calories.value.toIntOrNull() ?: 0,
-            imageUrl = _imageUrl.value
+            imageUri = _imageUri.value
         )
         viewModelScope.launch {
             recipeRepository.insert(newRecipe)
         }
     }
 }
-
-

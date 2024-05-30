@@ -1,5 +1,9 @@
 package com.example.recipesharingapp.ui.theme.screen
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
@@ -8,19 +12,24 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.example.recipesharingapp.viewModel.CreateRecipeViewModel
 import com.example.recipesharingapp.viewModel.AppViewModelProvider
 import kotlinx.coroutines.launch
 
 @Composable
 fun CreateRecipeScreen(
-    viewModel: CreateRecipeViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: CreateRecipeViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navController: NavController
 ) {
     val title by viewModel.title.collectAsState()
     val description by viewModel.description.collectAsState()
@@ -28,7 +37,7 @@ fun CreateRecipeScreen(
     val steps by viewModel.steps.collectAsState()
     val cookingTime by viewModel.cookingTime.collectAsState()
     val calories by viewModel.calories.collectAsState()
-    val imageUrl by viewModel.imageUrl.collectAsState()
+    val imageUri by viewModel.imageUri.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -127,17 +136,20 @@ fun CreateRecipeScreen(
         }
 
         item {
-            TextField(
-                value = imageUrl,
-                onValueChange = viewModel::onImageUrlChange,
-                label = { Text("URL") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                singleLine = true,
-                textStyle = TextStyle(fontSize = 18.sp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
+            ImagePicker(onImageUri = viewModel::onImageUriChange)
+        }
+
+        imageUri?.let { uri ->
+            item {
+                Image(
+                    painter = rememberAsyncImagePainter(model = uri),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .padding(16.dp)
+                )
+            }
         }
 
         item {
@@ -145,6 +157,7 @@ fun CreateRecipeScreen(
                 onClick = {
                     coroutineScope.launch {
                         viewModel.saveRecipe()
+                        navController.navigate("feed")
                     }
                 },
                 modifier = Modifier
@@ -155,5 +168,22 @@ fun CreateRecipeScreen(
                 Text(text = "Save Recipe", color = Color.White)
             }
         }
+    }
+}
+
+@Composable
+fun ImagePicker(
+    onImageUri: (Uri?) -> Unit
+) {
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        onImageUri(uri)
+    }
+
+    Button(onClick = {
+        launcher.launch("image/*")
+    }) {
+        Text(text = "Pick Image")
     }
 }
