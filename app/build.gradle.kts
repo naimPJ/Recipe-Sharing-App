@@ -82,4 +82,7 @@ dependencies {
 
     //image picker
     implementation("io.coil-kt:coil-compose:2.1.0")
+
+    implementation ("androidx.compose.material:material:1.0.5")
+
 }
