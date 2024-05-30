@@ -15,6 +15,8 @@ class UserRepository(private val usersDao: UsersDao): BaseRepository<Users> {
 
     fun getUsername(username: String): Flow<Users> = usersDao.getUsername(username)
 
-    fun login(password: String, email: String): Flow<Users?> = usersDao.login(password, email)
+    fun getEmailUser(email: String): Flow<Users> = usersDao.getEmailUser(email)
+
+    fun login(email: String, password: String): Flow<Users?> = usersDao.login(email, password)
 
 }

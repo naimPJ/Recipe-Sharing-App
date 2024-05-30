@@ -18,6 +18,9 @@ import androidx.navigation.navArgument
 import com.example.recipesharingapp.ui.theme.screen.CreateRecipeScreen
 import com.example.recipesharingapp.ui.theme.screen.RecipeDetailsScreen
 import com.example.recipesharingapp.ui.theme.screen.Feed
+import com.example.recipesharingapp.ui.theme.screen.LoginScreen
+import com.example.recipesharingapp.ui.theme.screen.RegisterScreen
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,9 +34,16 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(navController, startDestination = "createRecipe") {
+    NavHost(navController, startDestination = "register") {
         composable("feed") {
             Feed(navController = navController)
+        }
+        composable("login") {
+            LoginScreen(navController = navController)
+        }
+
+        composable("register") {
+            RegisterScreen(navController = navController)
         }
         composable("createRecipe") {
             CreateRecipeScreen(navController = navController)
