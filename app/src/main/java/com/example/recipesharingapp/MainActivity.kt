@@ -162,7 +162,7 @@ fun MainScreen() {
                 arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
             ) { backStackEntry ->
                 val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
-                RecipeDetailsScreen(recipeId = recipeId)
+                RecipeDetailsScreen(navController = navController, recipeId = recipeId)
             }
         }
     }

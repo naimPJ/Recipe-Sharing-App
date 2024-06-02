@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -45,79 +46,102 @@ fun ProfileScreen(
         val user by profileViewModel.user.collectAsState()
 
 
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp)
-            .clip(RoundedCornerShape(5.dp))
-            .background(Color(parseColor("#f7f7f7"))),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        )
-        {
+    LazyColumn(modifier = Modifier
+        .fillMaxSize()
+        .padding(10.dp)
+        .clip(RoundedCornerShape(5.dp))
+        .background(Color(parseColor("#f7f7f7"))),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        item {
             Spacer(modifier = Modifier.size(width = 0.dp, height = 100.dp))
+        }
+        item {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-            ){
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.cheflogin),
                     contentDescription = "default pfp",
-                    modifier= Modifier
+                    modifier = Modifier
                         .size(150.dp)
                         .clip(CircleShape)
                         .border(3.dp, Color(parseColor("#42cc33")), CircleShape),
                     contentScale = ContentScale.Crop
                 )
             }
+        }
+        item {
             Spacer(modifier = Modifier.size(width = 0.dp, height = 5.dp))
+        }
+        item {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-            ){
-                Text(text = "${user?.username}",
+            ) {
+                Text(
+                    text = "${user?.username}",
                     color = Color.Black,
                     fontSize = 23.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
+        }
+        item {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-            ){
-                Text(text = "${user?.email}",
+            ) {
+                Text(
+                    text = "${user?.email}",
                     color = Color(parseColor("#6c6c6c")),
                     fontSize = 14.sp,
                 )
             }
+        }
+        item {
             Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
-            Text(text = "About",
-                 )
-            Box(modifier = Modifier
-                .background(Color(parseColor("#fcfcff")))
-                .size(width = 350.dp, height = 200.dp),
+        }
+        item {
+            Text(text = "About")
+        }
+        item {
+            Box(
+                modifier = Modifier
+                    .background(Color(parseColor("#fcfcff")))
+                    .size(width = 350.dp, height = 200.dp),
                 contentAlignment = Alignment.TopStart,
-            ){
+            ) {
                 Text(
-                    text = if (user?.bio.isNullOrBlank())"No info yet." else "${user?.bio}",
+                    text = if (user?.bio.isNullOrBlank()) "No info yet." else "${user?.bio}",
                     color = Color(parseColor("#6c6c6c")),
                     fontSize = 13.sp,
                 )
             }
+        }
+        item {
             Spacer(modifier = Modifier.size(width = 0.dp, height = 50.dp))
+        }
+        item {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment =  Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Button( shape= RoundedCornerShape(5.dp),
+                Button(
+                    shape = RoundedCornerShape(5.dp),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 3.dp, pressedElevation = 0.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(parseColor("#42cc33"))),
-                    onClick ={ navController.navigate("editprofile/${userId}")}
-                )
-                {
+                    onClick = { navController.navigate("editprofile/${userId}") }
+                ) {
                     Text(
                         text = "Profile Settings",
                     )
                 }
             }
-
+        }
+        item {
             Spacer(modifier = Modifier.size(width = 0.dp, height = 20.dp))
+        }
+        item {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -138,10 +162,8 @@ fun ProfileScreen(
                     Text(text = "Logout")
                 }
             }
-
-
         }
-
+    }
 
 
     }
