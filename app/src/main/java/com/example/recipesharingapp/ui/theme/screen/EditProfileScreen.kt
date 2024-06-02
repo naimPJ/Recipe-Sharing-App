@@ -62,6 +62,14 @@ fun EditProfileScreen(navController: NavController,
     var newBio by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
 
+    LaunchedEffect(user) {
+        user?.let {
+            newUsername = it.username
+            newEmail = it.email
+            newBio = it.bio
+        }
+    }
+
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
