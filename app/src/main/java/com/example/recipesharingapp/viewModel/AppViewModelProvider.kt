@@ -29,6 +29,11 @@ object AppViewModelProvider {
                 recipeApplication().container.userRepository
             )
         }
+        initializer {
+            ProfileViewModel(
+                recipeApplication().container.userRepository
+            )
+        }
     }
 }
 

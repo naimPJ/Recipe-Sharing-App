@@ -85,11 +85,9 @@ fun RecipeDetailsScreen(
             ) {
 
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Carol Gilliam") // Replace with dynamic user data if available
+                Text(text = recipeDetails.username) // Replace with dynamic user data if available
                 Spacer(modifier = Modifier.width(8.dp))
-                Button(onClick = {}, colors = ButtonDefaults.buttonColors(Color.Green)) {
-                    Text(text = "Follow", color = Color.White)
-                }
+
             }
             Spacer(modifier = Modifier.height(16.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {

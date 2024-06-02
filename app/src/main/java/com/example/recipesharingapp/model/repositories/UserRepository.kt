@@ -19,4 +19,7 @@ class UserRepository(private val usersDao: UsersDao): BaseRepository<Users> {
 
     fun login(email: String, password: String): Flow<Users?> = usersDao.login(email, password)
 
+    suspend fun updateUser(username: String, email:String, bio:String, password:String, id:Int) =
+        usersDao.updateUser(username,email,bio,password,id)
+
 }

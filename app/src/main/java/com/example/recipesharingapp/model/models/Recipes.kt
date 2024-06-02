@@ -3,6 +3,7 @@ package com.example.recipesharingapp.model.models
 import android.net.Uri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import org.jetbrains.annotations.NotNull
@@ -10,7 +11,15 @@ import com.example.recipesharingapp.viewModel.Recipe
 import com.example.recipesharingapp.viewModel.UriTypeConverter
 
 
-@Entity(tableName = "Recipes")
+@Entity(
+    tableName = "Recipes",
+    foreignKeys = [ForeignKey(
+        entity = Users::class,
+        parentColumns = ["id"],
+        childColumns = ["userId"],
+        onDelete = ForeignKey.CASCADE
+    )]
+)
 @TypeConverters(UriTypeConverter::class)
 data class Recipes(
     @PrimaryKey(autoGenerate = true)
@@ -37,6 +46,9 @@ data class Recipes(
     val calories: Int,
 
     @ColumnInfo(name = "imageUri")
-    val imageUri: Uri?
+    val imageUri: Uri?,
+
+    @ColumnInfo(name = "userId")
+    val userId: Int
 )
 

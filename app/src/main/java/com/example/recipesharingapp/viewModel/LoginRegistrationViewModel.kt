@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.recipesharingapp.model.UserSession
 import com.example.recipesharingapp.model.repositories.UserRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
@@ -37,6 +38,7 @@ class LoginRegistrationViewModel(private val userRepository: UserRepository): Vi
 
         return if (user != null) {
             usersUiState = user.toUserUiState(true)
+            UserSession.currentUser = user
             true
         } else {
             false

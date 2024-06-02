@@ -3,6 +3,7 @@ package com.example.recipesharingapp.viewModel
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.recipesharingapp.model.UserSession
 import com.example.recipesharingapp.model.models.Recipes
 import com.example.recipesharingapp.model.repositories.RecipeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,6 +62,7 @@ class CreateRecipeViewModel(private val recipeRepository: RecipeRepository) : Vi
     }
 
     fun saveRecipe() {
+        val currentUserId = UserSession.currentUser?.id ?: return
         val newRecipe = Recipes(
             title = _title.value,
             description = _description.value,
@@ -68,7 +70,8 @@ class CreateRecipeViewModel(private val recipeRepository: RecipeRepository) : Vi
             instructions = _steps.value,
             cookingTime = _cookingTime.value.toIntOrNull() ?: 0,
             calories = _calories.value.toIntOrNull() ?: 0,
-            imageUri = _imageUri.value
+            imageUri = _imageUri.value,
+            userId = currentUserId
         )
         viewModelScope.launch {
             recipeRepository.insert(newRecipe)

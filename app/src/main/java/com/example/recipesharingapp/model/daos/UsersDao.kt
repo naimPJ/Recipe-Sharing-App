@@ -32,4 +32,7 @@ interface UsersDao {
     @Query("SELECT * FROM Users WHERE email = :email AND password = :password")
     fun login(email: String, password: String): Flow<Users?>
 
+    @Query("UPDATE Users SET username = :username, email = :email, bio = :bio, password = :password WHERE id = :id")
+    suspend fun updateUser(username: String, email: String, bio: String, password: String, id: Int)
+
 }

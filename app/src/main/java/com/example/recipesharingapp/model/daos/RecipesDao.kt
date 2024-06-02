@@ -1,5 +1,6 @@
 package com.example.recipesharingapp.model.daos
 
+import android.net.Uri
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -25,4 +26,24 @@ interface RecipesDao {
 
     @Query("SELECT * FROM Recipes")
     fun getRecipes(): Flow<List<Recipes>>
+
+    @Query("""
+        SELECT Recipes.*, Users.username 
+        FROM Recipes 
+        INNER JOIN Users ON Recipes.userId = Users.id 
+        WHERE Recipes.id = :id
+    """)
+    fun getRecipeWithUsername(id: Int): Flow<RecipeWithUser>
 }
+
+data class RecipeWithUser(
+    val id: Int,
+    val title: String,
+    val description: String,
+    val ingredients: String,
+    val instructions: String,
+    val cookingTime: Int,
+    val calories: Int,
+    val imageUri: Uri?,
+    val username: String
+)
